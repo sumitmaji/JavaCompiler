@@ -7,7 +7,7 @@ public class MultipleLookaheadParsingStrategyImpl implements ParsingStrategyI {
     private int k; //how many lookahead symbol
     int p = 0; //circular index of next token position to fill
 
-    public MultipleLookaheadParsingStrategyImpl(Parser parser, Scanner scanner) {
+    public MultipleLookaheadParsingStrategyImpl(Scanner scanner) {
         this.parser = parser;
         this.scanner = scanner;
         try {

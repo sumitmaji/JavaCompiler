@@ -1,5 +1,8 @@
 package com.sum.frontend;
 
+import static com.sum.frontend.ParsingStrategy.MULTIPLE_LOOKAHEAD;
+import static com.sum.frontend.ParsingStrategy.SINGLE_LOOKAHEAD;
+
 /**
  * <h1>Scanner</h1>
  * 
@@ -12,6 +15,8 @@ public abstract class Scanner {
 	protected Source source; // source
 	private Token currentToken; // current token
 
+	private ParsingStrategyI parsingStrategy;
+
 	/**
 	 * Constructor
 	 * 
@@ -20,6 +25,12 @@ public abstract class Scanner {
 	 */
 	public Scanner(Source source) {
 		this.source = source;
+		if(SINGLE_LOOKAHEAD.getType().equals(System.getProperty("parser.type"))){
+			parsingStrategy = new SingleLookaheadParsingStrategyImpl(this);
+		}else if(MULTIPLE_LOOKAHEAD.getType().equals(System.getProperty("parser.type"))){
+			parsingStrategy = new MultipleLookaheadParsingStrategyImpl(this);
+		}
+
 	}
 
 	/**
@@ -75,5 +86,25 @@ public abstract class Scanner {
 
 	public char peekChar() throws Exception{
 		return source.peekChar();
+	}
+
+	public void consume() throws Exception{
+		parsingStrategy.consume();
+	}
+
+	public void match(TokenType type) throws Exception{
+		parsingStrategy.match(type);
+	}
+
+	public TokenType LA(int i) throws Exception {
+		return parsingStrategy.LA(i);
+	}
+
+	public Token LT(int i) throws Exception {
+		return parsingStrategy.LT(i);
+	}
+
+	public boolean isCurrentToken(TokenType type){
+		return parsingStrategy.checkCurrentTokenIs(type);
 	}
 }

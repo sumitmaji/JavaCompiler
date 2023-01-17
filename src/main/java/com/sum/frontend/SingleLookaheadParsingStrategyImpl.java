@@ -1,13 +1,13 @@
 package com.sum.frontend;
 
-public class SingleLookaheadParsingStrategyImpl implements ParsingStrategyI{
+public class SingleLookaheadParsingStrategyImpl implements ParsingStrategyI {
     private Scanner scanner;
-    private Token  lookaheadToken;
-    public SingleLookaheadParsingStrategyImpl(Parser parser, Scanner scanner) {
+    private Token lookaheadToken;
+
+    public SingleLookaheadParsingStrategyImpl(Scanner scanner) {
         this.scanner = scanner;
         try {
-            if(scanner.currentToken() == null)
-                lookaheadToken = scanner.nextToken();
+            lookaheadToken = scanner.nextToken();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -20,7 +20,7 @@ public class SingleLookaheadParsingStrategyImpl implements ParsingStrategyI{
 
     @Override
     public void match(TokenType type) throws Exception {
-        if(lookaheadToken.getType() == type) consume();
+        if (lookaheadToken.getType() == type) consume();
         else throw new Exception("Expecting " + type + " but found " + lookaheadToken.getType());
     }
 
