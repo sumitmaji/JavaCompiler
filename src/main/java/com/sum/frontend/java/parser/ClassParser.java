@@ -17,25 +17,25 @@ public class ClassParser extends JavaParserTD {
     }
 
 
-    public void parse(Token token, ICode iCode) throws Exception {
+    public void parse(ICode iCode) throws Exception {
         ICodeNode rootNode = ICodeFactory.lookupICodeNode(iCode.getRoot(), "object");
         ICodeNode classNameNode = null;
-        String className = token.getText().toLowerCase();
+        String className = currentToken().getText().toLowerCase();
         SymTabEntry classNameId = symTabStack.lookup(className);
         if(classNameId == null){
             classNameId = symTabStack.enterLocal(className);
             classNameNode = ICodeFactory.createICodeNode(CLASS_NAME);
             classNameNode.setAttribute(ID, classNameId);
-            classNameId.appendLineNumber(token.getLineNumber());
+            classNameId.appendLineNumber(currentToken().getLineNumber());
         }
 
-        token = nextToken();
+        consume(); // consume the classname
 
-        switch ((JavaTokenType)token.getType()){
+        switch ((JavaTokenType)currentToken().getType()){
             case EXTENDS:
             case IMPLEMENTS:
                 ParentClassParser parentClassParser = new ParentClassParser(this);
-                parentClassParser.parse(token, classNameNode, iCode);
+                parentClassParser.parse(classNameNode, iCode);
                 break;
             default :
                 rootNode.addChild(classNameNode);

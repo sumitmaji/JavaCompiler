@@ -1,14 +1,13 @@
 package com.sum.frontend;
 
 public class SingleLookaheadParsingStrategyImpl implements ParsingStrategyI{
-    private Parser parser;
     private Scanner scanner;
     private Token  lookaheadToken;
     public SingleLookaheadParsingStrategyImpl(Parser parser, Scanner scanner) {
-        this.parser = parser;
         this.scanner = scanner;
         try {
-            lookaheadToken = scanner.nextToken();
+            if(scanner.currentToken() == null)
+                lookaheadToken = scanner.nextToken();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -37,6 +36,6 @@ public class SingleLookaheadParsingStrategyImpl implements ParsingStrategyI{
 
     @Override
     public Token getCurrentToken() {
-        return scanner.currentToken();
+        return lookaheadToken;
     }
 }

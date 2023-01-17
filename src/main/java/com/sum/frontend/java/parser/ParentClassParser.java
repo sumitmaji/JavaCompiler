@@ -19,9 +19,10 @@ public class ParentClassParser extends JavaParserTD {
         super(parent);
     }
 
-    public void parse(Token token, ICodeNode childNode, ICode iCode) throws Exception {
-        token = nextToken(); //consume extends
-        while((token.getType() != IMPLEMENTS && token.getType() != EXTENDS && token.getType() != LEFT_BRACE)){
+    public void parse(ICodeNode childNode, ICode iCode) throws Exception {
+        consume(); //consume extends
+        Token token = currentToken();
+        while((!isCurrentToken(IMPLEMENTS) && !isCurrentToken(EXTENDS) && !isCurrentToken(LEFT_BRACE))){
             if(token.getType() == COMMA){
                 token = nextToken(); //consume ,
                 continue;

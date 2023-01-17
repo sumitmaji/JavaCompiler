@@ -2,13 +2,10 @@ package com.sum.frontend.java;
 
 import com.sum.frontend.Parser;
 import com.sum.frontend.Scanner;
-import com.sum.frontend.Token;
 import com.sum.frontend.java.parser.ClassParser;
 import com.sum.intermediate.ICodeFactory;
 import com.sum.intermediate.ICodeNode;
 import com.sum.intermediate.SymTabEntry;
-import com.sum.intermediate.icodeimpl.ICodeKeyImpl;
-import com.sum.intermediate.icodeimpl.ICodeNodeTypeImpl;
 import com.sum.message.Message;
 
 import static com.sum.frontend.java.JavaErrorCode.IO_ERROR;
@@ -49,10 +46,8 @@ public class JavaParserTD extends Parser {
 
         try {
 
-            Token token = nextToken();
-
             SymTabEntry objectId = symTabStack.lookup("object");
-            if(objectId == null){
+            if (objectId == null) {
                 objectId = symTabStack.enterLocal("object");
             }
 
@@ -63,18 +58,18 @@ public class JavaParserTD extends Parser {
                 iCode.setRoot(rootNode);
             }
 
-			while(token.getType() != CLASS && token.getType() != INTERFACE && token.getType() != ENUM){
-				token = nextToken();
-			}
+            while (!isCurrentToken(CLASS) && !isCurrentToken(INTERFACE) && !isCurrentToken(ENUM)) {
+                consume();
+            }
 
-            token = nextToken(); //consume the class token
-			ClassParser classParser = new ClassParser(this);
-			classParser.parse(token, iCode);
+            consume(); //consume the class token
+            ClassParser classParser = new ClassParser(this);
+            classParser.parse(iCode);
 
             // Send the parser summary message.
             float elapsedTime = (System.currentTimeMillis() - startTime) / 1000f;
             sendMessage(new Message(PARSER_SUMMARY, new Number[]{
-                    token.getLineNumber(), getErrorCount(), elapsedTime}));
+                    currentToken().getLineNumber(), getErrorCount(), elapsedTime}));
         } catch (java.io.IOException ex) {
             errorHandler.abortTranslation(IO_ERROR, this);
         }
