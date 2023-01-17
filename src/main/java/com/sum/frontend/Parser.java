@@ -9,6 +9,7 @@ import com.sum.message.MessageHandler;
 import com.sum.message.MessageListener;
 import com.sum.message.MessageProducer;
 
+import static com.sum.frontend.ParsingStrategy.MULTIPLE_LOOKAHEAD;
 import static com.sum.frontend.ParsingStrategy.SINGLE_LOOKAHEAD;
 
 /**
@@ -42,6 +43,8 @@ public abstract class Parser implements MessageProducer {
 		this.scanner = scanner;
 		if(SINGLE_LOOKAHEAD.getType().equals(System.getProperty("parser.type"))){
 			parsingStrategy = new SingleLookaheadParsingStrategyImpl(this, scanner);
+		}else if(MULTIPLE_LOOKAHEAD.getType().equals(System.getProperty("parser.type"))){
+			parsingStrategy = new MultipleLookaheadParsingStrategyImpl(this, scanner);
 		}
 	}
 
