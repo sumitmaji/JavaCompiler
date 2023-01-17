@@ -34,4 +34,9 @@ public class SingleLookaheadParsingStrategyImpl implements ParsingStrategyI{
     public Token LT(int i) throws Exception {
         throw new Exception("No implementation provided");
     }
+
+    @Override
+    public Token getCurrentToken() {
+        return scanner.currentToken();
+    }
 }

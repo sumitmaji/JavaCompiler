@@ -150,4 +150,8 @@ public abstract class Parser implements MessageProducer {
 	public Token LT(int i) throws Exception {
 		return parsingStrategy.LT(i);
 	}
+
+	public boolean isCurrentToken(TokenType type){
+		return parsingStrategy.checkCurrentTokenIs(type);
+	}
 }

@@ -36,4 +36,9 @@ public class MultipleLookaheadParsingStrategyImpl implements ParsingStrategyI {
         if (LA(1) == type) consume();
         else throw new Exception("Expecting " + type + " but found " + LA(1));
     }
+
+    @Override
+    public Token getCurrentToken() {
+        return scanner.currentToken();
+    }
 }
