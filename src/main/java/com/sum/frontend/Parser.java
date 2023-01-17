@@ -9,6 +9,8 @@ import com.sum.message.MessageHandler;
 import com.sum.message.MessageListener;
 import com.sum.message.MessageProducer;
 
+import static com.sum.frontend.ParsingStrategy.SINGLE_LOOKAHEAD;
+
 /**
  * <h1>Parser</h1>
  * 
@@ -28,6 +30,7 @@ public abstract class Parser implements MessageProducer {
 
 	}
 	protected Scanner scanner; // scanner used with this parser
+	private ParsingStrategyI parsingStrategy;
 
 	/**
 	 * Constructor.
@@ -37,6 +40,9 @@ public abstract class Parser implements MessageProducer {
 	 */
 	protected Parser(Scanner scanner) {
 		this.scanner = scanner;
+		if(SINGLE_LOOKAHEAD.getType().equals(System.getProperty("parser.type"))){
+			parsingStrategy = new SingleLookaheadParsingStrategyImpl(this, scanner);
+		}
 	}
 
 	/**
@@ -124,6 +130,14 @@ public abstract class Parser implements MessageProducer {
 	}
 	public Scanner getScanner() {
 		return scanner;
+	}
+
+	public void consume() throws Exception{
+		parsingStrategy.consume();
+	}
+
+	public void match(TokenType type) throws Exception{
+		parsingStrategy.match(type);
 	}
 
 	
