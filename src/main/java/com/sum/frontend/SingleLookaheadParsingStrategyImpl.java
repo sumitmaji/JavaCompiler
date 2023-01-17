@@ -24,4 +24,14 @@ public class SingleLookaheadParsingStrategyImpl implements ParsingStrategyI{
         if(lookaheadToken.getType() == type) consume();
         else throw new Exception("Expecting " + type + " but found " + lookaheadToken.getType());
     }
+
+    @Override
+    public TokenType LA(int i) throws Exception {
+        throw new Exception("No implementation provided");
+    }
+
+    @Override
+    public Token LT(int i) throws Exception {
+        throw new Exception("No implementation provided");
+    }
 }

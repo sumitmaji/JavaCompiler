@@ -143,5 +143,11 @@ public abstract class Parser implements MessageProducer {
 		parsingStrategy.match(type);
 	}
 
-	
+	public TokenType LA(int i) throws Exception {
+		return parsingStrategy.LA(i);
+	}
+
+	public Token LT(int i) throws Exception {
+		return parsingStrategy.LT(i);
+	}
 }
