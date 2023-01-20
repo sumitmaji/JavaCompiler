@@ -2,16 +2,14 @@ package com.sum.frontend.java;
 
 import com.sum.frontend.Parser;
 import com.sum.frontend.Scanner;
-import com.sum.frontend.java.parser.ClassParser;
-import com.sum.intermediate.ICodeFactory;
-import com.sum.intermediate.ICodeNode;
-import com.sum.intermediate.SymTabEntry;
+import com.sum.frontend.Token;
+import com.sum.frontend.java.parser.StatementParser;
+import com.sum.intermediatei.ast.Node;
 import com.sum.message.Message;
 
-import static com.sum.frontend.java.JavaErrorCode.IO_ERROR;
-import static com.sum.frontend.java.JavaTokenType.*;
-import static com.sum.intermediate.icodeimpl.ICodeKeyImpl.ID;
-import static com.sum.intermediate.icodeimpl.ICodeNodeTypeImpl.OBJECT;
+import static com.sum.frontend.java.JavaErrorCode.*;
+import static com.sum.frontend.java.JavaTokenType.BEGIN;
+import static com.sum.frontend.java.JavaTokenType.DOT;
 import static com.sum.message.MessageType.PARSER_SUMMARY;
 
 /**
@@ -46,26 +44,26 @@ public class JavaParserTD extends Parser {
 
         try {
 
-            SymTabEntry objectId = symTabStack.lookup("object");
-            if (objectId == null) {
-                objectId = symTabStack.enterLocal("object");
+            Token token = currentToken();
+            Node rootNode = null;
+            // Look for the BEGIN token to parse a compound statement.
+            if (token.getType() == BEGIN) {
+                StatementParser statementParser = new StatementParser(this);
+                rootNode = statementParser.parse(token);
+                token = currentToken();
+            } else {
+                errorHandler.flag(token, UNEXPECTED_TOKEN, this);
             }
-
-            ICodeNode iCodeNode = ICodeFactory.lookupICodeNode(iCode.getRoot(), objectId.getName());
-            if (iCodeNode == null) {
-                ICodeNode rootNode = ICodeFactory.createICodeNode(OBJECT);
-                rootNode.setAttribute(ID, objectId);
-                iCode.setRoot(rootNode);
+            // Look for the final period.
+            if (token.getType() != DOT) {
+                errorHandler.flag(token, MISSING_PERIOD, this);
             }
+            token = currentToken();
 
-            while (!isCurrentToken(CLASS) && !isCurrentToken(INTERFACE) && !isCurrentToken(ENUM)) {
-                consume();
+            // Set the parse tree root node.
+            if (rootNode != null) {
+                ast.setRoot(rootNode);
             }
-
-            consume(); //consume the class token
-            ClassParser classParser = new ClassParser(this);
-            classParser.parse(iCode);
-
             // Send the parser summary message.
             float elapsedTime = (System.currentTimeMillis() - startTime) / 1000f;
             sendMessage(new Message(PARSER_SUMMARY, new Number[]{

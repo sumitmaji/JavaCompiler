@@ -8,11 +8,11 @@ import com.sum.frontend.Source;
 import com.sum.frontend.TokenType;
 import com.sum.intermediate.ICode;
 import com.sum.intermediate.SymTabStack;
+import com.sum.intermediatei.ast.Ast;
+import com.sum.intermediatei.ast.PrintVisitor;
 import com.sum.message.Message;
 import com.sum.message.MessageListener;
 import com.sum.message.MessageType;
-import com.sum.util.CrossReferencer;
-import com.sum.util.ParseTreePrinter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,6 +32,7 @@ public class Java {
 	private Parser parser; // language-independent parser
 	private Source source; // language-independent scanner
 	private ICode iCode; // generated intermediate code
+	private Ast ast;
 	private SymTabStack symTabStack; // generated symbol table
 	private Backend backend; // backend
 
@@ -57,18 +58,14 @@ public class Java {
 //			backend.addMessageListener(new BackendMessageListener());
 			parser.parse();
 			source.close();
-			iCode = parser.getICode();
-			symTabStack = parser.getSymTabStack();
+			ast = parser.getAst();
 
-			if (xref) {
-				CrossReferencer crossReferencer = new CrossReferencer();
-				crossReferencer.print(symTabStack);
+			PrintVisitor visitor = new PrintVisitor(System.out);
 
-				ParseTreePrinter parseTreePrinter = new ParseTreePrinter(System.out);
-				parseTreePrinter.print(iCode);
-			}
+			ast.getRoot().visit(visitor);
 
-			backend.process(iCode, symTabStack);
+
+//			backend.process(iCode, symTabStack);
 
 		} catch (Exception ex) {
 			System.out.println("***** Internal translator error. *****");
