@@ -30,6 +30,11 @@ public class Token {
 		extract();
 	}
 
+	public Token(TokenType type, String text){
+		this.type = type;
+		this.text = text;
+	}
+
 	/**
 	 * Default method to extract only one-character tokens from the source.
 	 * Subclasses can override this method to construct language-specific

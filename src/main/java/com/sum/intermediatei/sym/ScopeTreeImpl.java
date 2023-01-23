@@ -6,6 +6,7 @@ import static com.sum.intermediatei.sym.ScopeTypeImpl.METHOD;
 public class ScopeTreeImpl {
 
     public Scope currentScope;
+    private Symbol programId;
 
     public ScopeTreeImpl() {
         this.currentScope = new GlobalScope();
@@ -25,5 +26,14 @@ public class ScopeTreeImpl {
 
     public Scope pop(){
         return currentScope = currentScope.getEnclosingScope();
+    }
+
+    public Symbol getProgramId() {
+        return programId;
+    }
+
+
+    public void setProgramId(Symbol programId) {
+        this.programId = programId;
     }
 }

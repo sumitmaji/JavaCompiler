@@ -10,6 +10,7 @@ import com.sum.intermediate.ICode;
 import com.sum.intermediate.SymTabStack;
 import com.sum.intermediatei.ast.Ast;
 import com.sum.intermediatei.ast.PrintVisitor;
+import com.sum.intermediatei.sym.ScopeTreeImpl;
 import com.sum.message.Message;
 import com.sum.message.MessageListener;
 import com.sum.message.MessageType;
@@ -51,18 +52,18 @@ public class Java {
 			boolean intermediate = flags.indexOf('i') > -1;
 			boolean xref = flags.indexOf('x') > -1;
 			source = new Source(new BufferedReader(new FileReader(filePath)));
-//			source.addMessageListener(new SourceMessageListener());
+			source.addMessageListener(new SourceMessageListener());
 			parser = FrontendFactory.createParser("Java", "top-down", source);
-//			parser.addMessageListener(new ParserMessageListener());
+			parser.addMessageListener(new ParserMessageListener());
 			backend = BackendFactory.createBackend(operation);
-//			backend.addMessageListener(new BackendMessageListener());
+			backend.addMessageListener(new BackendMessageListener());
 			parser.parse();
 			source.close();
-			ast = parser.getAst();
+
+			ScopeTreeImpl scopeTree = parser.getScopeTree();
 
 			PrintVisitor visitor = new PrintVisitor(System.out);
-
-			ast.getRoot().visit(visitor);
+			scopeTree.getProgramId().getNode().visit(visitor);
 
 
 //			backend.process(iCode, symTabStack);

@@ -24,19 +24,19 @@ public class DeclaredMethodParser extends DeclarationParser {
                     scope = new MethodSymbol(LT(2).getText().toLowerCase(), (Type) symbol, scopeTree.currentScope);
                     match(IDENTIFIER);
                     match(IDENTIFIER);
-                    scopeTree.push(scope);
-                    List<Symbol> symbols = parseMethodParams(token);
-                    ((MethodSymbol)scope).setArgs(symbols);
                 }
             }else{
                 scope = new ProgramSymbol(LT(1).getText().toLowerCase(), null, scopeTree.currentScope);
                 match(IDENTIFIER);
-                scopeTree.push(scope);
             }
         }else if(LA(1) == MAIN){
             scope = new MethodSymbol(LT(1).getText().toLowerCase(), null, scopeTree.currentScope);
+            scopeTree.setProgramId((Symbol) scope);
             match(MAIN);
-            scopeTree.push(scope);
+        }
+
+        scopeTree.push(scope);
+        if(scope instanceof MethodSymbol){
             List<Symbol> symbols = parseMethodParams(token);
             ((MethodSymbol)scope).setArgs(symbols);
         }
@@ -47,6 +47,7 @@ public class DeclaredMethodParser extends DeclarationParser {
         match(RIGHT_BRACE);
 
         ((Symbol)scope).setNode(rootNode);
+        scopeTree.pop();
     }
 
     private List<Symbol> parseMethodParams(Token token) throws Exception {

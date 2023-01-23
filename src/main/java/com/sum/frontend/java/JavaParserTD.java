@@ -40,13 +40,9 @@ public class JavaParserTD extends Parser {
      */
     public void parse() throws Exception {
         long startTime = System.currentTimeMillis();
-
         try {
-
-            Token token = currentToken();
-
             ProgramParser programParser = new ProgramParser(this);
-            programParser.parser(token);
+            programParser.parser(currentToken());
 
             float elapsedTime = (System.currentTimeMillis() - startTime) / 1000f;
             sendMessage(new Message(PARSER_SUMMARY, new Number[]{

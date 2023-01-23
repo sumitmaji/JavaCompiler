@@ -152,7 +152,14 @@ public class PrintVisitor implements NodeVisitor {
         }
         indentation = saveIndentation;
     }
-
+    private void printChildNode(List<Node> childNodes) {
+        String saveIndentation = indentation;
+        indentation += indent;
+        for (Node childNode : childNodes) {
+            childNode.visit(this);
+        }
+        indentation = saveIndentation;
+    }
 
     @Override
     public void visit(AddNode node) {
@@ -185,10 +192,9 @@ public class PrintVisitor implements NodeVisitor {
 
     @Override
     public void visit(CompoundNode compoundNode) {
-        List<Node> children = compoundNode.childNodes;
-        for (Node child : children) {
-            child.visit(this);
-        }
+        printNodeWithChildBegin(compoundNode);
+        printChildNode(compoundNode.childNodes);
+        printNodeWithChildEnd(compoundNode);
     }
 
     @Override

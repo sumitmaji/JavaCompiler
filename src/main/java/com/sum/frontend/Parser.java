@@ -30,8 +30,10 @@ public abstract class Parser implements MessageProducer {
         scopeTree = ScopeFactory.createScopeTree();
         messageHandler = new MessageHandler();
         ast = NodeFactory.createAst();
-        ;
+    }
 
+    public ScopeTreeImpl getScopeTree() {
+        return scopeTree;
     }
 
     protected Scanner scanner; // scanner used with this parser

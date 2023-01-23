@@ -52,7 +52,6 @@ public class AssignmentStatementParser extends StatementParser {
 		ExpressionParser expressionParser = new ExpressionParser(this);
 		ExprNode exprNode = expressionParser.parse(currentToken());
 
-		match(SEMICOLON);
 		// Create the ASSIGN node.
 		AssignNode assignNode = new AssignNode((VariableNode) variableNode, token, exprNode);
 		return assignNode;

@@ -1,6 +1,7 @@
 package com.sum.intermediatei.ast;
 
 import com.sum.frontend.Token;
+import com.sum.frontend.java.JavaTokenType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +9,8 @@ import java.util.List;
 public class CompoundNode extends Node{
 
     List<Node> childNodes = new ArrayList<>();
-    public CompoundNode(Token payload) {
-        super(payload);
+    public CompoundNode() {
+        super(new Token(JavaTokenType.COMPOUND, "compound"));
     }
 
     @Override
