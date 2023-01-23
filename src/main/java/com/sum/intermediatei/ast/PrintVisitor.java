@@ -292,4 +292,9 @@ public class PrintVisitor implements NodeVisitor {
     public void visit(SubstractNode substractNode) {
 
     }
+
+    @Override
+    public void visit(VariableDeclNode variableDeclNode) {
+
+    }
 }

@@ -19,8 +19,12 @@ public class SingleLookaheadParsingStrategyImpl implements ParsingStrategyI {
     }
 
     @Override
-    public void match(TokenType type) throws Exception {
-        if (lookaheadToken.getType() == type) consume();
+    public Token match(TokenType type) throws Exception {
+        if (lookaheadToken.getType() == type) {
+            Token currentToken = lookaheadToken;
+            consume();
+            return currentToken;
+        }
         else throw new Exception("Expecting " + type + " but found " + lookaheadToken.getType());
     }
 
@@ -32,6 +36,17 @@ public class SingleLookaheadParsingStrategyImpl implements ParsingStrategyI {
     @Override
     public Token LT(int i) throws Exception {
         throw new Exception("No implementation provided");
+    }
+
+    @Override
+    public Token currentToken() throws Exception {
+        return lookaheadToken;
+    }
+
+    @Override
+    public Token nextToken() throws Exception {
+        consume();
+        return lookaheadToken;
     }
 
     @Override

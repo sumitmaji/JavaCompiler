@@ -286,7 +286,7 @@ public class ExpressionParser extends JavaParserTD {
 			// Look for the matching ) token.
 			token = currentToken();
 			if (isCurrentToken(RIGHT_PAREN)) {
-				token = nextToken(); // consume the )
+				consume(); // consume the )
 			} else {
 				errorHandler.flag(token, MISSING_RIGHT_PAREN, this);
 			}

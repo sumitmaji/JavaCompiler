@@ -11,8 +11,8 @@ import com.sum.intermediatei.ast.Node;
 import com.sum.intermediatei.ast.VariableNode;
 
 import static com.sum.frontend.java.JavaErrorCode.MISSING_COLON_EQUALS;
-import static com.sum.frontend.java.JavaTokenType.COLON_EQUALS;
-import static com.sum.frontend.java.JavaTokenType.IDENTIFIER;
+import static com.sum.frontend.java.JavaErrorCode.MISSING_EQUALS;
+import static com.sum.frontend.java.JavaTokenType.*;
 import static com.sum.intermediate.icodeimpl.ICodeKeyImpl.ID;
 import static com.sum.intermediate.icodeimpl.ICodeNodeTypeImpl.ASSIGN;
 import static com.sum.intermediate.icodeimpl.ICodeNodeTypeImpl.VARIABLE;
@@ -34,27 +34,17 @@ public class AssignmentStatementParser extends StatementParser {
 	 */
 	public Node parse(Token token) throws Exception {
 
-		// Create the variable node and set its name attribute.
-		VariableNode variableNode = new VariableNode(token);
-//		String targetName = token.getText().toLowerCase();
-		// Look up the target identifer in the symbol table stack.
-		// Enter the identifier into the table if it's not found.
-//		SymTabEntry targetId = symTabStack.lookup(targetName);
-//		if (targetId == null) {
-//			targetId = symTabStack.enterLocal(targetName);
-//		}
-//		targetId.appendLineNumber(token.getLineNumber());
+		VariableParser variableParser = new VariableParser(this);
+		Node variableNode = variableParser.parse(currentToken());
 
-
-		match(IDENTIFIER); // consume the identifier
 //		variableNode.setAttribute(ID, targetId);
 		// The ASSIGN node adopts the variable node as its first child.
-		// Look for the := token.
-		if (isCurrentToken(COLON_EQUALS)) {
+		// Look for the = token.
+		if (isCurrentToken(EQUALS)) {
 			token = currentToken();
-			match(COLON_EQUALS); // consume the :=
+			match(EQUALS); // consume the =
 		} else {
-			errorHandler.flag(token, MISSING_COLON_EQUALS, this);
+			errorHandler.flag(token, MISSING_EQUALS, this);
 		}
 
 		// Parse the expression. The ASSIGN node adopts the expression's
@@ -62,8 +52,9 @@ public class AssignmentStatementParser extends StatementParser {
 		ExpressionParser expressionParser = new ExpressionParser(this);
 		ExprNode exprNode = expressionParser.parse(currentToken());
 
+		match(SEMICOLON);
 		// Create the ASSIGN node.
-		AssignNode assignNode = new AssignNode(variableNode, token, exprNode);
+		AssignNode assignNode = new AssignNode((VariableNode) variableNode, token, exprNode);
 		return assignNode;
 	}
 }

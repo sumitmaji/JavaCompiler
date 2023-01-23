@@ -37,7 +37,11 @@ public abstract class Scanner {
 	 * @return the current token.
 	 */
 	public Token currentToken() {
-		return currentToken;
+
+		if(parsingStrategy == null)
+			return currentToken;
+		else
+			return parsingStrategy.getCurrentToken();
 	}
 
 	/**
@@ -47,7 +51,7 @@ public abstract class Scanner {
 	 * @throws Exception
 	 *             if an error occurred.
 	 */
-	public Token nextToken() throws Exception {
+	Token nextToken() throws Exception {
 		currentToken = extractToken();
 		return currentToken;
 	}
@@ -92,8 +96,8 @@ public abstract class Scanner {
 		parsingStrategy.consume();
 	}
 
-	public void match(TokenType type) throws Exception{
-		parsingStrategy.match(type);
+	public Token match(TokenType type) throws Exception{
+		return parsingStrategy.match(type);
 	}
 
 	public TokenType LA(int i) throws Exception {

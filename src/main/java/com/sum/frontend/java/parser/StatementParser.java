@@ -44,13 +44,6 @@ public class StatementParser extends JavaParserTD {
 
 		Node statementNode = null;
 		switch ((JavaTokenType) token.getType()) {
-		case BEGIN: {
-			CompoundStatementParser compoundParser = new CompoundStatementParser(
-					this);
-			statementNode = compoundParser.parseCompound();
-			break;
-		}
-			// An assignment statement begins with a variable's identifier.
 		case IDENTIFIER: {
 			AssignmentStatementParser assignmentParser = new AssignmentStatementParser(
 					this);

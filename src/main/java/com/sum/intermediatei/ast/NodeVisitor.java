@@ -51,4 +51,6 @@ public interface NodeVisitor {
     void visit(SubscriptNode subscriptNode);
 
     void visit(SubstractNode substractNode);
+
+    void visit(VariableDeclNode variableDeclNode);
 }
