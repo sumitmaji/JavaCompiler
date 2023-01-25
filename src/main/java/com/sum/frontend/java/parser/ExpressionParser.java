@@ -7,6 +7,8 @@ import com.sum.frontend.java.JavaTokenType;
 import com.sum.intermediate.ICodeNodeType;
 import com.sum.intermediate.icodeimpl.ICodeNodeTypeImpl;
 import com.sum.intermediatei.ast.*;
+import com.sum.intermediatei.sym.MethodSymbol;
+import com.sum.intermediatei.sym.Symbol;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -231,19 +233,7 @@ public class ExpressionParser extends JavaParserTD {
 		ExprNode rootNode = null;
 		switch ((JavaTokenType) tokenType) {
 		case IDENTIFIER: {
-			// Look up the identifier in the symbol table stack.
-			// Flag the identifier as undefined if it's not found.
-//			String name = token.getText().toLowerCase();
-//			SymTabEntry id = symTabStack.lookup(name);
-//			if (id == null) {
-//				errorHandler.flag(token, IDENTIFIER_UNDEFINED, this);
-//				id = symTabStack.enterLocal(name);
-//			}
-			rootNode = new VariableNode(token);
-//			rootNode.setAttribute(ID, id);
-//			id.appendLineNumber(token.getLineNumber());
-			match(IDENTIFIER); // consume the identifier
-			break;
+			return parseIdentifier(token);
 		}
 		case INTEGER: {
 			// Create an INTEGER_CONSTANT node as the root node.
@@ -299,5 +289,20 @@ public class ExpressionParser extends JavaParserTD {
 		}
 		}
 		return rootNode;
+	}
+
+	private ExprNode parseIdentifier(Token token) throws Exception {
+
+		Node rootNode = null;
+		String name = token.getText().toLowerCase();
+		Symbol symbol = scopeTree.resolve(name);
+		if(symbol instanceof MethodSymbol){
+			CallParser callParser = new CallParser(this);
+			rootNode = callParser.parse(currentToken());
+		}else{
+			VariableParser variableParser = new VariableParser(this);
+			rootNode = variableParser.parse(currentToken());
+		}
+		return (ExprNode) rootNode;
 	}
 }

@@ -303,4 +303,14 @@ public class PrintVisitor implements NodeVisitor {
     public void visit(VariableDeclNode variableDeclNode) {
 
     }
+
+    @Override
+    public void visit(CallNode callNode) {
+
+    }
+
+    @Override
+    public void visit(ParametersNode parametersNode) {
+
+    }
 }

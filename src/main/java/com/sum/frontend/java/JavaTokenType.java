@@ -20,7 +20,7 @@ public enum JavaTokenType implements TokenType {
 			"]"), LEFT_BRACE("{"), RIGHT_BRACE("}"), UP_ARROW("^"), DOT_DOT(
 			".."),
 
-	IDENTIFIER, INTEGER, INT, REAL, STRING, COMPOUND, ERROR, END_OF_FILE;
+	IDENTIFIER, INTEGER, INT, REAL, STRING, COMPOUND, PARAMETER, ERROR, END_OF_FILE;
 	private static final int FIRST_RESERVED_INDEX = CLASS.ordinal();
 	private static final int LAST_RESERVED_INDEX = WHILE.ordinal();
 	private static final int FIRST_SPECIAL_INDEX = PLUS.ordinal();
