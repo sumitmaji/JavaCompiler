@@ -2,10 +2,7 @@ package com.sum.frontend.java;
 
 import com.sum.frontend.Parser;
 import com.sum.frontend.Scanner;
-import com.sum.frontend.Token;
-import com.sum.frontend.java.parser.BlockParser;
 import com.sum.frontend.java.parser.ProgramParser;
-import com.sum.intermediatei.ast.Node;
 import com.sum.message.Message;
 
 import static com.sum.frontend.java.JavaErrorCode.IO_ERROR;
@@ -42,7 +39,7 @@ public class JavaParserTD extends Parser {
         long startTime = System.currentTimeMillis();
         try {
             ProgramParser programParser = new ProgramParser(this);
-            programParser.parser(currentToken());
+            programParser.parse(currentToken());
 
             float elapsedTime = (System.currentTimeMillis() - startTime) / 1000f;
             sendMessage(new Message(PARSER_SUMMARY, new Number[]{

@@ -16,7 +16,7 @@ public class VariableDeclarationParser extends DeclarationParser {
         super(parent);
     }
 
-    public void parser(Token token) throws Exception {
+    public void parse(Token token) throws Exception {
         Symbol typeSymbol = scopeTree.resolve(token.getText().toLowerCase());
         match(IDENTIFIER);
 
@@ -33,7 +33,7 @@ public class VariableDeclarationParser extends DeclarationParser {
 
     protected Type parseTypeSpecification(Token token) throws Exception {
         TypeSpecificationParser typeSpecificationParser = new TypeSpecificationParser(this);
-        return typeSpecificationParser.parser(token);
+        return typeSpecificationParser.parse(token);
     }
 
     public List<Symbol> parseSublist(Token token) throws Exception {
@@ -42,7 +42,7 @@ public class VariableDeclarationParser extends DeclarationParser {
         while(LA(1) != RIGHT_PAREN){
             if(LA(1) == IDENTIFIER){
                 TypeSpecificationParser typeSpecificationParser = new TypeSpecificationParser(this);
-                Type type = typeSpecificationParser.parser(currentToken());
+                Type type = typeSpecificationParser.parse(currentToken());
 
                 Token identifierToken = match(IDENTIFIER);
                 list.add(new VariableSymbol(identifierToken.getText().toLowerCase(), type, scopeTree.currentScope));

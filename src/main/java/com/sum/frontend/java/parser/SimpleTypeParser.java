@@ -13,7 +13,7 @@ public class SimpleTypeParser extends JavaParserTD {
         super(parent);
     }
 
-    public Type parser(Token token) throws Exception {
+    public Type parse(Token token) throws Exception {
 
         switch ((JavaTokenType) LA(1)) {
             case IDENTIFIER:

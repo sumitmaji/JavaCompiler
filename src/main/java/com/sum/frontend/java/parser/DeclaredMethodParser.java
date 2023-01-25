@@ -14,7 +14,7 @@ public class DeclaredMethodParser extends DeclarationParser {
         super(parent);
     }
 
-    public void parser(Token token) throws Exception {
+    public void parse(Token token) throws Exception {
 
         Scope scope = null;
         if (LA(1) == IDENTIFIER) {
@@ -43,7 +43,7 @@ public class DeclaredMethodParser extends DeclarationParser {
 
         match(LEFT_BRACE);
         BlockParser blockParser = new BlockParser(this);
-        Node rootNode = blockParser.parser(currentToken());
+        Node rootNode = blockParser.parse(currentToken());
         match(RIGHT_BRACE);
 
         ((Symbol) scope).setNode(rootNode);

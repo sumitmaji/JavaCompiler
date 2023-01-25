@@ -12,7 +12,7 @@ public class DeclarationParser extends JavaParserTD {
         super(parent);
     }
 
-    public void parser(Token token) throws Exception {
+    public void parse(Token token) throws Exception {
 
         while (isCurrentToken(IDENTIFIER)) {
             Symbol typeSymbol = scopeTree.resolve(currentToken().getText().toLowerCase());
@@ -20,12 +20,12 @@ public class DeclarationParser extends JavaParserTD {
                 if (LA(2) == IDENTIFIER) {
                     if (LA(3) == SEMICOLON || LA(3) == COMMA) {
                         VariableDeclarationParser declarationParser = new VariableDeclarationParser(this);
-                        declarationParser.parser(currentToken());
+                        declarationParser.parse(currentToken());
                     }
 
                     if (LA(3) == LEFT_PAREN) {
                         DeclaredMethodParser declaredMethodParser = new DeclaredMethodParser(this);
-                        declaredMethodParser.parser(currentToken());
+                        declaredMethodParser.parse(currentToken());
                     }
                 }
             }else{
@@ -35,7 +35,7 @@ public class DeclarationParser extends JavaParserTD {
         }
         if(isCurrentToken(MAIN)){
             DeclaredMethodParser declaredMethodParser = new DeclaredMethodParser(this);
-            declaredMethodParser.parser(currentToken());
+            declaredMethodParser.parse(currentToken());
         }
     }
 }
