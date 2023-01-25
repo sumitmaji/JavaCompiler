@@ -42,7 +42,7 @@ public class VariableDeclarationParser extends DeclarationParser {
         while(LA(1) != RIGHT_PAREN){
             if(LA(1) == IDENTIFIER){
                 TypeSpecificationParser typeSpecificationParser = new TypeSpecificationParser(this);
-                Type type = typeSpecificationParser.parser(token);
+                Type type = typeSpecificationParser.parser(currentToken());
 
                 Token identifierToken = match(IDENTIFIER);
                 list.add(new VariableSymbol(identifierToken.getText().toLowerCase(), type, scopeTree.currentScope));

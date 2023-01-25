@@ -6,10 +6,9 @@ import com.sum.intermediatei.ast.Ast;
 import com.sum.intermediatei.ast.NodeFactory;
 import com.sum.intermediatei.sym.ScopeFactory;
 import com.sum.intermediatei.sym.ScopeTreeImpl;
-import com.sum.message.Message;
-import com.sum.message.MessageHandler;
-import com.sum.message.MessageListener;
-import com.sum.message.MessageProducer;
+import com.sum.message.*;
+
+import static com.sum.message.MessageType.TOKEN;
 
 /**
  * <h1>Parser</h1>
@@ -116,12 +115,12 @@ public abstract class Parser implements MessageProducer {
         return scanner;
     }
 
-    public void consume() throws Exception {
-        scanner.consume();
-    }
-
     public Token match(TokenType type) throws Exception {
-        return scanner.match(type);
+        Token currentToken = scanner.match(type);
+        sendMessage(new Message(TOKEN, new Object[]{
+                currentToken.lineNum, currentToken.position, currentToken.type, currentToken.text, currentToken.value
+        }));
+        return currentToken;
     }
 
     public TokenType LA(int i) throws Exception {

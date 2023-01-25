@@ -1,7 +1,7 @@
 package com.sum.frontend;
 
 public interface ParsingStrategyI {
-    void consume() throws Exception;
+    Token consume() throws Exception;
     Token match(TokenType type) throws Exception;
 
     Token getCurrentToken();

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import static com.sum.frontend.java.JavaErrorCode.MISSING_RIGHT_PAREN;
 import static com.sum.frontend.java.JavaErrorCode.UNEXPECTED_TOKEN;
 import static com.sum.frontend.java.JavaTokenType.*;
+import static com.sum.frontend.java.JavaTokenType.NOT;
 import static com.sum.intermediate.icodeimpl.ICodeNodeTypeImpl.*;
 
 public class ExpressionParser extends JavaParserTD {
@@ -64,7 +65,7 @@ public class ExpressionParser extends JavaParserTD {
 		TokenType tokenType = token.getType();
 		// Look for a relational operator.
 		if (REL_OPS.contains(tokenType)) {
-			consume(); // consume the operator
+			match(tokenType); // consume the operator
 
 			// Parse the second simple expression. The operator node adopts
 			// the simple expression's tree as its second child.
@@ -119,7 +120,7 @@ public class ExpressionParser extends JavaParserTD {
 		TokenType tokenType = token.getType();
 		if ((isCurrentToken(PLUS)) || (isCurrentToken(MINUS))) {
 			signType = tokenType;
-			consume(); // consume the + or -
+			match(tokenType); // consume the + or -
 		}
 		// Parse a term and make the root of its tree the root node.
 		token = currentToken();
@@ -135,7 +136,7 @@ public class ExpressionParser extends JavaParserTD {
 		tokenType = token.getType();
 		// Loop over additive operators.
 		while (ADD_OPS.contains(tokenType)) {
-			consume(); // consume the add operators
+			match(tokenType); // consume the add operators
 
 			// Parse another term. The operator node adopts
 			// the term's tree as its second child.
@@ -187,7 +188,7 @@ public class ExpressionParser extends JavaParserTD {
 		TokenType tokenType = token.getType();
 		// Loop over multiplicative operators.
 		while (MULT_OPS.contains(tokenType)) {
-			consume(); // consume operator token
+			match(tokenType); // consume operator token
 
 			// Parse another factor. The operator node adopts
 			// the term's tree as its second child.
@@ -241,21 +242,21 @@ public class ExpressionParser extends JavaParserTD {
 			rootNode = new VariableNode(token);
 //			rootNode.setAttribute(ID, id);
 //			id.appendLineNumber(token.getLineNumber());
-			consume(); // consume the identifier
+			match(IDENTIFIER); // consume the identifier
 			break;
 		}
 		case INTEGER: {
 			// Create an INTEGER_CONSTANT node as the root node.
 			rootNode = new IntConstNode(token);
 //			rootNode.setAttribute(VALUE, token.getValue());
-			consume(); // consume the number
+			match(INTEGER); // consume the number
 			break;
 		}
 		case REAL: {
 			// Create an REAL_CONSTANT node as the root node.
 			rootNode = new ReadConstNode(token);
 //			rootNode.setAttribute(VALUE, token.getValue());
-			consume(); // consume the number
+			match(REAL); // consume the number
 			break;
 		}
 		case STRING: {
@@ -263,12 +264,12 @@ public class ExpressionParser extends JavaParserTD {
 			// Create a STRING_CONSTANT node as the root node.
 			rootNode = new StringConstNode(token);
 //			rootNode.setAttribute(VALUE, value);
-			consume(); // consume the string
+			match(STRING); // consume the string
 			break;
 		}
 		case NOT: {
 			// token is NOT token
-			consume(); // consume the NOT token
+			match(NOT); // consume the NOT token
 
 			// Parse the factor. The NOT node adopts the
 			// factor node as its child.
@@ -276,17 +277,17 @@ public class ExpressionParser extends JavaParserTD {
 
 			// Create a NOT node as the root node.
 			rootNode = new NotNode(token, childNode);
-			consume();// consume the NOT
+			match(NOT);// consume the NOT
 			break;
 		}
 		case LEFT_PAREN: {
-			consume(); // consume the (
+			match(LEFT_PAREN); // consume the (
 			// Parse an expression and make its node the root node.
 			rootNode = parseExpression();
 			// Look for the matching ) token.
 			token = currentToken();
 			if (isCurrentToken(RIGHT_PAREN)) {
-				consume(); // consume the )
+				match(RIGHT_PAREN); // consume the )
 			} else {
 				errorHandler.flag(token, MISSING_RIGHT_PAREN, this);
 			}

@@ -6,6 +6,8 @@ import com.sum.frontend.java.JavaTokenType;
 import com.sum.intermediatei.sym.Symbol;
 import com.sum.intermediatei.sym.Type;
 
+import static com.sum.frontend.java.JavaTokenType.IDENTIFIER;
+
 public class SimpleTypeParser extends JavaParserTD {
     public SimpleTypeParser(JavaParserTD parent) {
         super(parent);
@@ -18,7 +20,7 @@ public class SimpleTypeParser extends JavaParserTD {
                 String name = LT(1).getText().toLowerCase();
                 Symbol id = scopeTree.resolve(name);
                 if (id != null) {
-                    consume(); // consume the type
+                    match(IDENTIFIER); // consume the type
                     if (id instanceof Type) {
                         return (Type) id;
                     }

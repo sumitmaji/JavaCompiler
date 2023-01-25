@@ -4,7 +4,7 @@ public class SingleLookaheadParsingStrategyImpl implements ParsingStrategyI {
     private Scanner scanner;
     private Token lookaheadToken;
 
-    public SingleLookaheadParsingStrategyImpl(Scanner scanner) {
+    public SingleLookaheadParsingStrategyImpl(Scanner scanner, Source source) {
         this.scanner = scanner;
         try {
             lookaheadToken = scanner.nextToken();
@@ -14,8 +14,9 @@ public class SingleLookaheadParsingStrategyImpl implements ParsingStrategyI {
     }
 
     @Override
-    public void consume() throws Exception {
+    public Token consume() throws Exception {
         lookaheadToken = scanner.nextToken();
+        return lookaheadToken;
     }
 
     @Override

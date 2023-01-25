@@ -26,9 +26,9 @@ public abstract class Scanner {
 	public Scanner(Source source) {
 		this.source = source;
 		if(SINGLE_LOOKAHEAD.getType().equals(System.getProperty("parser.type"))){
-			parsingStrategy = new SingleLookaheadParsingStrategyImpl(this);
+			parsingStrategy = new SingleLookaheadParsingStrategyImpl(this, source);
 		}else if(MULTIPLE_LOOKAHEAD.getType().equals(System.getProperty("parser.type"))){
-			parsingStrategy = new MultipleLookaheadParsingStrategyImpl(this);
+			parsingStrategy = new MultipleLookaheadParsingStrategyImpl(this, source);
 		}
 
 	}
@@ -92,8 +92,8 @@ public abstract class Scanner {
 		return source.peekChar();
 	}
 
-	public void consume() throws Exception{
-		parsingStrategy.consume();
+	public Token consume() throws Exception{
+		return parsingStrategy.consume();
 	}
 
 	public Token match(TokenType type) throws Exception{

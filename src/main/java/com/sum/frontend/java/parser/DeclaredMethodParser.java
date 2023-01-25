@@ -17,28 +17,28 @@ public class DeclaredMethodParser extends DeclarationParser {
     public void parser(Token token) throws Exception {
 
         Scope scope = null;
-        if(LA(1) == IDENTIFIER){
+        if (LA(1) == IDENTIFIER) {
             Symbol symbol = scopeTree.resolve(token.getText().toLowerCase());
-            if(symbol != null && symbol instanceof Type){
-                if(LA(2) == IDENTIFIER) {
+            if (symbol != null && symbol instanceof Type) {
+                if (LA(2) == IDENTIFIER) {
                     scope = new MethodSymbol(LT(2).getText().toLowerCase(), (Type) symbol, scopeTree.currentScope);
                     match(IDENTIFIER);
                     match(IDENTIFIER);
                 }
-            }else{
+            } else {
                 scope = new ProgramSymbol(LT(1).getText().toLowerCase(), null, scopeTree.currentScope);
                 match(IDENTIFIER);
             }
-        }else if(LA(1) == MAIN){
+        } else if (LA(1) == MAIN) {
             scope = new MethodSymbol(LT(1).getText().toLowerCase(), null, scopeTree.currentScope);
             scopeTree.setProgramId((Symbol) scope);
             match(MAIN);
         }
 
         scopeTree.push(scope);
-        if(scope instanceof MethodSymbol){
+        if (scope instanceof MethodSymbol) {
             List<Symbol> symbols = parseMethodParams(token);
-            ((MethodSymbol)scope).setArgs(symbols);
+            ((MethodSymbol) scope).setArgs(symbols);
         }
 
         match(LEFT_BRACE);
@@ -46,7 +46,7 @@ public class DeclaredMethodParser extends DeclarationParser {
         Node rootNode = blockParser.parser(currentToken());
         match(RIGHT_BRACE);
 
-        ((Symbol)scope).setNode(rootNode);
+        ((Symbol) scope).setNode(rootNode);
         scopeTree.pop();
     }
 

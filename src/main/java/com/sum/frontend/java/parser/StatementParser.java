@@ -10,10 +10,8 @@ import com.sum.intermediatei.ast.CompoundNode;
 import com.sum.intermediatei.ast.NoOpNode;
 import com.sum.intermediatei.ast.Node;
 
-import static com.sum.frontend.java.JavaErrorCode.MISSING_SEMICOLON;
-import static com.sum.frontend.java.JavaErrorCode.UNEXPECTED_TOKEN;
-import static com.sum.frontend.java.JavaTokenType.IDENTIFIER;
-import static com.sum.frontend.java.JavaTokenType.SEMICOLON;
+import static com.sum.frontend.java.JavaErrorCode.*;
+import static com.sum.frontend.java.JavaTokenType.*;
 
 public class StatementParser extends JavaParserTD {
     /**
@@ -37,6 +35,10 @@ public class StatementParser extends JavaParserTD {
 
         Node statementNode = null;
         switch ((JavaTokenType) token.getType()) {
+            case LEFT_BRACE:{
+                CompoundStatementParser compoundStatementParser = new CompoundStatementParser(this);
+                compoundStatementParser.parse(currentToken());
+            }
             case IDENTIFIER: {
                 AssignmentStatementParser assignmentParser = new AssignmentStatementParser(
                         this);
@@ -49,7 +51,7 @@ public class StatementParser extends JavaParserTD {
             }
         }
         // Set the current line number as an attribute.
-        setLineNumber(statementNode, token);
+        setLineNumber(statementNode, currentToken());
         return statementNode;
     }
 
@@ -99,7 +101,7 @@ public class StatementParser extends JavaParserTD {
             // Unexpected token.
             else if (tokenType != terminator) {
                 errorHandler.flag(token, UNEXPECTED_TOKEN, this);
-                consume(); // consume the unexpected token
+                match(tokenType); // consume the unexpected token
             }
 
             token = currentToken();

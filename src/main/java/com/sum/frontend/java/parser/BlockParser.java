@@ -15,7 +15,7 @@ public class BlockParser extends JavaParserTD {
 
     public Node parser(Token token) throws Exception {
         DeclarationParser declarationParser = new DeclarationParser(this);
-        declarationParser.parser(token);
+        declarationParser.parser(currentToken());
 
         CompoundStatementParser statementParser = new CompoundStatementParser(this);
         return statementParser.parse(currentToken());
